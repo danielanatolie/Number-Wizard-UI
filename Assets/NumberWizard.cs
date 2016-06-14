@@ -1,21 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI; // This is to be able to update our text
 
 public class NumberWizard : MonoBehaviour {
 	int max;
 	int min;
 	int guess;
-
+	
+	public int maxGuessesAllowed = 100;
+	public Text text;
+	
 	// Use this for initialization
 	void Start () {
 		startGame();
 	}
 	
 	void startGame () {
-		max = 1000;
+		max = 1001;
 		min = 1; 
-		guess = 500;
-		max++; // Max will not be rounded to 999
+		nextGuess();
 	}
 
 	public void guessHigher() {
@@ -29,8 +32,12 @@ public class NumberWizard : MonoBehaviour {
 	}	
 	
 	void nextGuess() {
-		guess = (max + min)/2; // Has will now be set to half-way between maximum and minimum
-		print("Higher or lower than " + guess);
-		print ("Up arrow for higher, down for lower, return for equal");
+		guess = Random.Range(min, max++);//guess = (max + min)/2; // Has will now be set to half-way between maximum and minimum
+		text.text = guess.ToString(); // Turn generated guess into a String
+		maxGuessesAllowed--;
+		if(maxGuessesAllowed <= 0) {
+			// Load the [Win] scene:
+			Application.LoadLevel("Win");
+		}
 	}
 }
